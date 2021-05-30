@@ -3,10 +3,10 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useDispatch, useSelector } from "react-redux";
 import { setSeries } from "../../actions";
+import ChartTable from "../chartTable/ChartTable";
 const Chart = () => {
-  const { chartData, series } = useSelector((state) => state.chart);
+  const { chartData, series, startDate } = useSelector((state) => state.chart);
   const dispatch = useDispatch();
-
   const LabelData = (label) => {
     const LabelDataArr = chartData.map((data) => {
       return data[label];
@@ -20,13 +20,21 @@ const Chart = () => {
     });
     return filterArr;
   };
+  const averageValue = (data) => {
+    const arr = filterArr(data);
+    console.log(arr, "Asdsads");
+    if (arr.length > 0) {
+      const value = arr.reduce((acc, cur) => acc + cur) / arr.length;
+      return parseInt(value);
+    }
+  };
   const minValue = (arr) => {
-    const minValue = Math.min.apply(null, filterArr(arr));
-    return minValue;
+    const value = Math.min.apply(null, filterArr(arr));
+    return parseInt(value);
   };
   const maxValue = (arr) => {
-    const maxValue = Math.max.apply(null, filterArr(arr));
-    return maxValue;
+    const value = Math.max.apply(null, filterArr(arr));
+    return parseInt(value);
   };
   const deviationValue = (arr) => {
     const max = maxValue(arr);
@@ -34,39 +42,43 @@ const Chart = () => {
     const result = max - min;
     return result;
   };
-  
+
   useEffect(() => {
     const totalData = [
       {
         name: "BlackScr",
         data: LabelData("BlackScr"),
         color: "red",
-        max: minValue(LabelData("BlackScr")),
-        min: maxValue(LabelData("BlackScr")),
+        average: averageValue(LabelData("BlackScr")),
+        min: minValue(LabelData("BlackScr")),
+        max: maxValue(LabelData("BlackScr")),
         deviation: deviationValue(LabelData("BlackScr")),
       },
       {
         name: "EC_slab1",
         data: LabelData("EC_slab1"),
         color: "green",
-        max: minValue(LabelData("EC_slab1")),
-        min: maxValue(LabelData("EC_slab1")),
+        average: averageValue(LabelData("EC_slab1")),
+        min: minValue(LabelData("EC_slab1")),
+        max: maxValue(LabelData("EC_slab1")),
         deviation: deviationValue(LabelData("EC_slab1")),
       },
       {
         name: "CO2air",
         data: LabelData("CO2air"),
         color: "blue",
-        max: minValue(LabelData("CO2air")),
-        min: maxValue(LabelData("CO2air")),
+        average: averageValue(LabelData("CO2air")),
+        min: minValue(LabelData("CO2air")),
+        max: maxValue(LabelData("CO2air")),
         deviation: deviationValue(LabelData("CO2air")),
       },
       {
         name: "EC_drain_PC",
         data: LabelData("EC_drain_PC"),
         color: "yellow",
-        max: minValue(LabelData("EC_drain_PC")),
-        min: maxValue(LabelData("EC_drain_PC")),
+        average: averageValue(LabelData("EC_drain_PC")),
+        min: minValue(LabelData("EC_drain_PC")),
+        max: maxValue(LabelData("EC_drain_PC")),
         deviation: deviationValue(LabelData("EC_drain_PC")),
       },
     ];
@@ -108,24 +120,15 @@ const Chart = () => {
     legend: {
       enabled: true,
       useHTML: true,
-      verticalAlign: 'bottom',
+      verticalAlign: "bottom",
       y: 60,
-      layout: 'vertical'
+      layout: "vertical",
     },
     plotOptions: {
-      spline: {
-        lineWidth: 4,
-        states: {
-          hover: {
-            lineWidth: 5,
-          },
-        },
-        marker: {
-          enabled: false,
-        },
-        pointInterval: 36000, // one hour
-        pointStart: Date.UTC(2020, 3, 13, 0, 0, 0),
-      },
+      series: {
+        pointStart: Date.UTC(2010, 3, 2),
+        pointInterval: 24 * 3600 * 1000 // one day
+    }
     },
     // xAxis: {
     //   type: "datetime",
@@ -138,9 +141,10 @@ const Chart = () => {
   return (
     <div>
       <HighchartsReact highcharts={Highcharts} options={options} />
-      <button>aaa</button>
+      <ChartTable series={series} />
     </div>
   );
 };
 
 export default Chart;
+git 

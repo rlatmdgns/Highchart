@@ -3,6 +3,7 @@ import { LOAD_CHART_DATA, SET_SERIES } from "../actions";
 export const initalState = {
   chartData: [],
   series: [],
+  startDate:""
 };
 
 const reducer = (state = initalState, action) => {
@@ -11,6 +12,7 @@ const reducer = (state = initalState, action) => {
       return {
         ...state,
         chartData: action.data.dataset,
+        startDate:action.data.dataset[0].time,
       };
     case SET_SERIES:
       return {
