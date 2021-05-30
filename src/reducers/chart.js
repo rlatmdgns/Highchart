@@ -1,9 +1,10 @@
-import { LOAD_CHART_DATA, SET_SERIES } from "../actions";
+import { LOAD_CHART_DATA, SET_SERIES, COLOR_CHANGE } from "../actions";
 
 export const initalState = {
   chartData: [],
-  series: [],
-  startDate:""
+  dataSet: [],
+  startDate: "",
+  colorChangeDone:false,
 };
 
 const reducer = (state = initalState, action) => {
@@ -12,13 +13,22 @@ const reducer = (state = initalState, action) => {
       return {
         ...state,
         chartData: action.data.dataset,
-        startDate:action.data.dataset[0].time,
+        startDate: action.data.dataset[0].time,
       };
     case SET_SERIES:
       return {
         ...state,
-        series: action.data,
+        dataSet: action.data,
       };
+    case COLOR_CHANGE: {
+      return {
+        ...state,
+        dataSet: state.dataSet.map((data, index) =>
+          index === action.data.index ? { ...data, color: action.data.colorHexCode } : data
+        ),
+        colorChangeDone:true,
+      };
+    }
     default:
       return state;
   }

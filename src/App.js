@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { loadChartData } from './actions';
-// import chartData from "./chartData";
 import HighCharts from "./components/Chart/Chart";
 function App() {
   const dispatch = useDispatch()
