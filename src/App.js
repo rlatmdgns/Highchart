@@ -17,8 +17,6 @@ function App() {
   useEffect(() => {
     getData();
   }, []);
-
-  
   return (
     <div className="App">
       <HighCharts />

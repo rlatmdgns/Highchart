@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Highcharts from "highcharts";
+import React, { useEffect, useRef, useState } from "react";
+import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useDispatch, useSelector } from "react-redux";
 import { setSeries } from "../../actions";
 import ChartTable from "../ChartTable/ChartTable";
+require("highcharts/modules/exporting")(Highcharts);
+require("highcharts/modules/export-data")(Highcharts);
 const Chart = () => {
   const { chartData, dataSet, startDate } = useSelector((state) => state.chart);
+  console.log(chartData);
   const dispatch = useDispatch();
   const [checkItems, setCheckItems] = useState([]);
+  const chart = useRef();
 
   const LabelData = (label) => {
     const LabelDataArr = chartData.map((data) => {
@@ -49,7 +53,7 @@ const Chart = () => {
       timezoneOffset: 5 * 60,
     },
     chart: {
-      type: "spline",
+      type: "line",
       scrollablePlotArea: {
         minWidth: 600,
         scrollPositionX: 1,
@@ -68,19 +72,25 @@ const Chart = () => {
       labels: {
         overflow: "justify",
       },
+      crosshair: true
     },
-    yAxis: {
-      title: {
-        text: "",
+    yAxis: [
+      {
+        title: {
+          text: "",
+        },
       },
-    },
+      {
+        opposite: true,
+      },
+    ],
     legend: {
       enabled: false,
     },
     plotOptions: {
       series: {
         pointStart: Date.UTC(2010, 3, 2),
-        pointInterval: 48000, // one day
+        pointInterval: 72000, // one day
         events: {
           hide: function (e) {
             handleSingleCheck(e.target.visible, e.target.index, options);
@@ -128,6 +138,7 @@ const Chart = () => {
     const totalData = [
       {
         name: "BlackScr",
+        yAxis: 0,
         data: LabelData("BlackScr"),
         color: "#000",
         average: averageValue(LabelData("BlackScr")),
@@ -137,6 +148,7 @@ const Chart = () => {
       },
       {
         name: "EC_slab1",
+        yAxis: 0,
         data: LabelData("EC_slab1"),
         color: "green",
         average: averageValue(LabelData("EC_slab1")),
@@ -146,15 +158,18 @@ const Chart = () => {
       },
       {
         name: "CO2air",
+        yAxis: 1,
         data: LabelData("CO2air"),
         color: "blue",
         average: averageValue(LabelData("CO2air")),
         min: minValue(LabelData("CO2air")),
         max: maxValue(LabelData("CO2air")),
         deviation: deviationValue(LabelData("CO2air")),
+        zoneAxis: "y",
       },
       {
         name: "EC_drain_PC",
+        yAxis: 0,
         data: LabelData("EC_drain_PC"),
         color: "yellow",
         average: averageValue(LabelData("EC_drain_PC")),
@@ -168,9 +183,17 @@ const Chart = () => {
     dataSet.map((v, i) => (ids[i] = i));
     setCheckItems(ids);
   }, [chartData]);
+  const downloadCSV = () => {
+    if (chart && chart.current && chart.current.chart) {
+      chart.current.chart.downloadCSV();
+    }
+  };
   return (
     <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <button type="button" onClick={downloadCSV}>
+        CSV데이터 다운
+      </button>
+      <HighchartsReact ref={chart} highcharts={Highcharts} options={options} />
       <ChartTable
         series={dataSet}
         handleSingleCheck={handleSingleCheck}

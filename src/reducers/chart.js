@@ -1,10 +1,10 @@
-import { LOAD_CHART_DATA, SET_SERIES, COLOR_CHANGE } from "../actions";
+import { LOAD_CHART_DATA, SET_SERIES, COLOR_CHANGE, Y_AXIS_CHANGE} from "../actions";
 
 export const initalState = {
   chartData: [],
   dataSet: [],
   startDate: "",
-  colorChangeDone:false,
+  colorChangeDone: false,
 };
 
 const reducer = (state = initalState, action) => {
@@ -23,10 +23,18 @@ const reducer = (state = initalState, action) => {
     case COLOR_CHANGE: {
       return {
         ...state,
-        dataSet: state.dataSet.map((data, index) =>
-          index === action.data.index ? { ...data, color: action.data.colorHexCode } : data
+        dataSet: state.dataSet.map((data) =>
+          data.name === action.data.name ? { ...data, color: action.data.colorHexCode } : data
         ),
-        colorChangeDone:true,
+        colorChangeDone: true,
+      };
+    }
+    case Y_AXIS_CHANGE: {
+      return {
+        ...state,
+        dataSet: state.dataSet.map((data) =>
+          data.name === action.data.name ? { ...data, yAxis: action.data.value } : data
+        ),
       };
     }
     default:
