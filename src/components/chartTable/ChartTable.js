@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { yAxisChange } from "../../actions";
 import { ColorPicker } from "../ColorPicker";
+import Input from "../common/Input";
+import Label from '../common/Label';
 import { Table, Thead, Tbody, ColorPickerWrapper, Symbol } from "./styles";
 const ChartTable = ({ options, series, handleSingleCheck, checkItems, handleAllCheck }) => {
   const dispatch = useDispatch();
-  const onChangeYaxis = (name, value) => {
+  const onChangeYaxis = useCallback((name, value) => {
     dispatch(yAxisChange({ name, value }));
-  };
+  }, []);
   return (
     <div>
       <Table>
@@ -33,7 +35,6 @@ const ChartTable = ({ options, series, handleSingleCheck, checkItems, handleAllC
         </Thead>
         <Tbody>
           {series.map((data, index) => {
-            console.log(data);
             return (
               <tr key={index}>
                 <td>
@@ -53,8 +54,8 @@ const ChartTable = ({ options, series, handleSingleCheck, checkItems, handleAllC
                 <td>{data.min}</td>
                 <td>{data.max}</td>
                 <td>
-                  <label>
-                    <input
+                  <Label>
+                    <Input
                       type="radio"
                       name={data.name}
                       id=""
@@ -62,9 +63,9 @@ const ChartTable = ({ options, series, handleSingleCheck, checkItems, handleAllC
                       onChange={() => onChangeYaxis(data.name, 0)}
                     />
                     왼쪽
-                  </label>
-                  <label>
-                    <input
+                  </Label>
+                  <Label>
+                    <Input
                       type="radio"
                       name={data.name}
                       id=""
@@ -72,7 +73,7 @@ const ChartTable = ({ options, series, handleSingleCheck, checkItems, handleAllC
                       onChange={() => onChangeYaxis(data.name, 1)}
                     />
                     오른쪽
-                  </label>
+                  </Label>
                 </td>
                 <td>
                   <ColorPickerWrapper>
