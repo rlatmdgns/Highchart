@@ -191,7 +191,7 @@ const Chart = () => {
     },
     series: [...dataSet],
   };
-  
+
   return (
     <div>
       <button type="button" onClick={downloadCSV}>

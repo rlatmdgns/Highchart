@@ -1,1 +1,1 @@
-export {default as ChartTable} from './ChartTable'
+export { default as ChartTable } from "./ChartTable";

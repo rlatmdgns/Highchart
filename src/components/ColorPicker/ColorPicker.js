@@ -3,7 +3,7 @@ import { SwatchesPicker } from "react-color";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { colorChange } from "../../actions";
-import {Wrapper, PickerWrapper, ColorButton} from "./styles";
+import { Wrapper, PickerWrapper, ColorButton } from "./styles";
 
 const ColorPicker = ({ color, index, name }) => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const ColorPicker = ({ color, index, name }) => {
     if (displayColorPicker === false) {
       setDisplayColorPickerate(true);
     } else setDisplayColorPickerate(false);
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (colorChangeDone) {
@@ -23,7 +23,6 @@ const ColorPicker = ({ color, index, name }) => {
     }
     dispatch(colorChange({ colorHexCode, name }));
   }, [colorChangeDone, colorHexCode]);
-
 
   return (
     <Wrapper>

@@ -1,15 +1,15 @@
 import React from "react";
 import { useEffect } from "react";
-import { useDispatch } from 'react-redux';
-import { loadChartData } from './actions';
+import { useDispatch } from "react-redux";
+import { loadChartData } from "./actions";
 import HighCharts from "./components/Chart/Chart";
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const getData = async () => {
     try {
       const response = await fetch("chartData.json");
       const data = await response.json();
-      dispatch(loadChartData(data))
+      dispatch(loadChartData(data));
     } catch (error) {
       console.log(error);
     }

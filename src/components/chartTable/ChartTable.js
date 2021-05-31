@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { yAxisChange } from "../../actions";
 import { ColorPicker } from "../ColorPicker";
 import Input from "../common/Input";
-import Label from '../common/Label';
+import Label from "../common/Label";
 import { Table, Thead, Tbody, ColorPickerWrapper, Symbol } from "./styles";
 const ChartTable = ({ options, series, handleSingleCheck, checkItems, handleAllCheck }) => {
   const dispatch = useDispatch();

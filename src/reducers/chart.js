@@ -1,4 +1,4 @@
-import { LOAD_CHART_DATA, SET_SERIES, COLOR_CHANGE, Y_AXIS_CHANGE} from "../actions";
+import { LOAD_CHART_DATA, SET_SERIES, COLOR_CHANGE, Y_AXIS_CHANGE } from "../actions";
 
 export const initalState = {
   chartData: [],

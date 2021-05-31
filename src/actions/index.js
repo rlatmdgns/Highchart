@@ -4,23 +4,21 @@ export const COLOR_CHANGE = "COLOR_CHANGE";
 export const Y_AXIS_CHANGE = "Y_AXIS_CHANGE";
 
 export const loadChartData = (data) => ({
-  type:LOAD_CHART_DATA,
-  data
-})
+  type: LOAD_CHART_DATA,
+  data,
+});
 
 export const setSeries = (data) => ({
-  type:SET_SERIES,
-  data
-})
-
+  type: SET_SERIES,
+  data,
+});
 
 export const colorChange = (data) => ({
-  type:COLOR_CHANGE,
-  data
-})
-
+  type: COLOR_CHANGE,
+  data,
+});
 
 export const yAxisChange = (data) => ({
-  type:Y_AXIS_CHANGE,
-  data
-})
+  type: Y_AXIS_CHANGE,
+  data,
+});
