@@ -1,70 +1,83 @@
-# Getting Started with Create React App
+# 시계열 라인 차트 구현
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 실행 방법
 
-## Available Scripts
+node -v v14.15.1 로 설치 
 
-In the project directory, you can run:
+`npm i`   
 
-### `yarn start`
+`npm start` 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**dependencies**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```jsx
+dependencies: {
+	"highcharts": "^9.1.0",
+	"highcharts-react-official": "^3.0.0",
+	"react": "^17.0.2",
+	"react-chartjs-2": "^3.0.3",
+	"react-color": "^2.19.3",
+	"react-dom": "^17.0.2",
+	"react-redux": "^7.2.4",
+	"react-scripts": "4.0.3",
+	"redux": "^4.1.0",
+	"redux-devtools-extension": "^2.13.9",
+	"styled-components": "^5.3.0",
+}
+```
 
-### `yarn test`
+## **프로젝트 소개**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+데이터를 기반으로 React 를 활용 및  차트 라이브러리를 사용하여 시계열 차트 만들기 
 
-### `yarn build`
+## **프로젝트 목표**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- highchart라이브러리를 사용하여 요구사항에 맞게 만드는 것이 목표입니다.
+- 차트 필수 기능 구현 목표입니다.
+- Redux state 전역관리
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+필수기능 구현 시 추가 목표 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 드래그앤 드롭
+- 달력 기능 추가
+- 차트 고도화
+- redux ⇒ mobx
 
-### `yarn eject`
+## **기술 스택**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- React.js(CRA)
+- highcharts
+- stlyed-components
+- Redux
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## **구현 기능**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- fecth를 통해 json 파일 데이터 가져오기
+- 차트의 데이터를 csv 형식으로 다운로드
+- 항목별 색상, 항목명, 평균값, 최소값, 최대값, 편차 (최대-최소) 이 표시
+- 항목별로 차트에 표시할 지 여부를 선택하는 체크박스가 있어야 함
+- 항목별로 오른쪽 또는 왼쪽 y축 기준으로 볼 것인지 선택
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## **issue 사항**
 
-## Learn More
+- highcharts -> chart.js 로 변경
+highcharts 가 custom 가이드 설명이 잘. 되어있지 않아 잘 되어있는 chart.js로 변경
+- chart.js -> highcharts 다시 변경
+chart.js 에 맞게 데이터를 재가공을 해주어야 하는 이슈로 highcharts 라이브러리로 원복
+- 최대값, 최소값, 편차 등을 구할 때 데이터안에 NaN이 있을 경우
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    ```jsx
+    const NaNfilterArr = (arr) => {
+     const filterArr = arr.filter((item) => 
+    	{
+    	 return item !== "NaN" && item !== undefined && item !== ""; 
+    	});
+     return filterArr; 
+    };
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    NaN, undefined, "" 일 경우 걸러 주는 필터 함수 이용하여서 처리하였습니다.
+    ```
 
-### Code Splitting
+- 차트에 표시할 지 여부를 선택하는 체크박스
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    options.series[i].visible = true  , state로 관리를 하지 않고 options에서 처리하고 있어서 초기 렌더링에서 작동하여 redux를 사용하여 변경하게 하였습니다.
