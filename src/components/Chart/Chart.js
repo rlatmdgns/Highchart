@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,6 @@ require("highcharts/modules/export-data")(Highcharts);
 const Chart = () => {
   const { chartData, dataSet, startDate } = useSelector((state) => state.chart);
   const dispatch = useDispatch();
-  const [checkItems, setCheckItems] = useState([]);
   const chart = useRef();
 
   const LabelData = (label) => {
@@ -46,40 +45,6 @@ const Chart = () => {
     return result;
   };
 
-  const handleSingleCheck = (checked, id, options) => {
-    if (checked) {
-      setCheckItems([...checkItems, id]);
-      options.series[id].visible = true;
-    } else {
-      // 체크 해제
-      options.series[id].visible = false;
-      setCheckItems(checkItems.filter((el) => el !== id));
-    }
-  };
-  // 체크박스 전체 선택
-  const handleAllCheck = useCallback(
-    (checked) => {
-      if (checked) {
-        const idArray = [];
-        // 전체 체크 박스가 체크 되면 id를 가진 모든 elements를 배열에 넣어주어서,
-        // 전체 체크 박스 체크
-        dataSet.map((el, i) => {
-          idArray.push(i);
-          options.series[i].visible = true;
-        });
-        setCheckItems(idArray);
-      }
-      // 반대의 경우 전체 체크 박스 체크 삭제
-      else {
-        setCheckItems([]);
-        dataSet.map((el, i) => {
-          options.series[i].visible = false;
-        });
-      }
-    },
-    [dataSet]
-  );
-
   useEffect(() => {
     const totalData = [
       {
@@ -91,6 +56,7 @@ const Chart = () => {
         min: minValue(LabelData("BlackScr")),
         max: maxValue(LabelData("BlackScr")),
         deviation: deviationValue(LabelData("BlackScr")),
+        visible: true,
       },
       {
         name: "EC_slab1",
@@ -101,6 +67,7 @@ const Chart = () => {
         min: minValue(LabelData("EC_slab1")),
         max: maxValue(LabelData("EC_slab1")),
         deviation: deviationValue(LabelData("EC_slab1")),
+        visible: true,
       },
       {
         name: "CO2air",
@@ -112,6 +79,7 @@ const Chart = () => {
         max: maxValue(LabelData("CO2air")),
         deviation: deviationValue(LabelData("CO2air")),
         zoneAxis: "y",
+        visible: true,
       },
       {
         name: "EC_drain_PC",
@@ -122,12 +90,10 @@ const Chart = () => {
         min: minValue(LabelData("EC_drain_PC")),
         max: maxValue(LabelData("EC_drain_PC")),
         deviation: deviationValue(LabelData("EC_drain_PC")),
+        visible: true,
       },
     ];
     dispatch(setSeries(totalData));
-    let ids = [];
-    dataSet.map((v, i) => (ids[i] = i));
-    setCheckItems(ids);
   }, [chartData]);
 
   const downloadCSV = useCallback(() => {
@@ -179,14 +145,6 @@ const Chart = () => {
       series: {
         pointStart: Date.UTC(2010, 3, 2),
         pointInterval: 72000, // one day
-        events: {
-          hide: function (e) {
-            handleSingleCheck(e.target.visible, e.target.index, options);
-          },
-          show: function (e) {
-            handleSingleCheck(e.target.visible, e.target.index, options);
-          },
-        },
       },
     },
     series: [...dataSet],
@@ -200,9 +158,6 @@ const Chart = () => {
       <HighchartsReact ref={chart} highcharts={Highcharts} options={options} />
       <ChartTable
         series={dataSet}
-        handleSingleCheck={handleSingleCheck}
-        handleAllCheck={handleAllCheck}
-        checkItems={checkItems}
         options={options}
       />
     </div>

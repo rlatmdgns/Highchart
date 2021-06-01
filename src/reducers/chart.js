@@ -1,4 +1,13 @@
-import { LOAD_CHART_DATA, SET_SERIES, COLOR_CHANGE, Y_AXIS_CHANGE } from "../actions";
+import {
+  LOAD_CHART_DATA,
+  SET_SERIES,
+  COLOR_CHANGE,
+  Y_AXIS_CHANGE,
+  ALL_CHECK_CHANGE,
+  UNALL_CHECK_CHANGE,
+  CHECK_CHANGE,
+  UNCHECK_CHANGE,
+} from "../actions";
 
 export const initalState = {
   chartData: [],
@@ -37,6 +46,25 @@ const reducer = (state = initalState, action) => {
         ),
       };
     }
+    case CHECK_CHANGE: {
+      return {
+        ...state,
+        dataSet: state.dataSet.map((data) =>
+          data.name === action.data.name ? { ...data, visible: action.data.value } : data
+        ),
+      };
+    }
+
+    case ALL_CHECK_CHANGE: {
+      return {
+        ...state,
+        dataSet: state.dataSet.map((data) =>{
+          return { ...data, visible: action.data.value }
+        }
+        ),
+      };
+    }
+
     default:
       return state;
   }

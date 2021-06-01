@@ -5,4 +5,3 @@ const Input = ({ onChange, ...rest }) => {
 };
 
 export default Input;
-F
